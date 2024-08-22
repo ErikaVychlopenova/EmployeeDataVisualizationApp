@@ -1,12 +1,11 @@
-import { ApplicationConfig } from '@angular/core';
+import { ApplicationConfig, importProvidersFrom, provideZoneChangeDetection } from '@angular/core';
 import { provideRouter } from '@angular/router';
-import { HttpClientModule } from '@angular/common/http'; // Import HttpClientModule
-
 import { routes } from './app.routes';
+import { provideHttpClient } from '@angular/common/http';
+import { provideAnimations} from '@angular/platform-browser/animations';
+import { CommonModule } from '@angular/common';
 
 export const appConfig: ApplicationConfig = {
-  providers: [
-    provideRouter(routes),
-    HttpClientModule // Add HttpClientModule here
-  ]
+  providers: [provideZoneChangeDetection({ eventCoalescing: true }), provideRouter(routes), provideHttpClient(), provideAnimations(), CommonModule],
+  
 };

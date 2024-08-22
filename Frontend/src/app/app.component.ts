@@ -1,32 +1,30 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
 import { RouterOutlet } from '@angular/router';
-import { DataService } from './data.service';
+import { HttpClientModule } from '@angular/common/http';
+import { EmployeeTableComponent } from './employee-table/employee-table.component';
+import { CardModule } from 'primeng/card';
+import { ChartModule } from 'primeng/chart';
+import { EmployeeChartComponent } from "./employee-chart/employee-chart.component";
+import { Observable } from 'rxjs';
+import { EmployeeDataService, TableData } from './employee-data.service';
+
+
+
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, HttpClientModule],
+  imports: [RouterOutlet, HttpClientModule, EmployeeTableComponent, CardModule, ChartModule, EmployeeChartComponent],
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrl: './app.component.css'
 })
 export class AppComponent implements OnInit {
   title = 'Frontend';
-  timeEntries: any[] = [];
-  errorMessage: string | null = null;
+  employeeData!: Observable<TableData[]>;
 
-  constructor(private dataService: DataService) {}
+  constructor(private employeeDataService: EmployeeDataService) {}
 
   ngOnInit(): void {
-    this.dataService.getTimeEntries().subscribe(
-      (response) => {
-        this.timeEntries = response;
-        this.errorMessage = null;
-      },
-      (error) => {
-        console.error('Error fetching time entries', error);
-        this.errorMessage = 'Failed to load data. Please try again later.';
-      }
-    );
+    this.employeeData = this.employeeDataService.getEmployeeData()
   }
 }
