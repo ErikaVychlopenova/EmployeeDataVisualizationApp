@@ -13,7 +13,7 @@ namespace Backend.Services
         public EmployeeDataService(HttpClient httpClient, IConfiguration configuration)
         {
             _httpClient = httpClient;
-            _employeeDataUrl = configuration["ExternalApi:EmployeeDataUrl"];
+            _employeeDataUrl = "https://rc-vault-fap-live-1.azurewebsites.net/api/gettimeentries?code=vO17RnE8vuzXzPJo5eaLLjXjmRW07law99QTD90zat9FfOQJKKUcgQ==";
         }
 
         public async Task<List<EmployeeData>> GetEmployeeDataAsync()

@@ -3,12 +3,12 @@ import { HttpClient } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
 
 export interface EmployeeData {
-  Id: string;
-  EmployeeName: string;
-  StarTimeUtc: Date;
-  EndTimeUtc: Date;
-  EntryNotes: string;
-  DeletedOn: string;
+  id: string;
+  employeeName: string;
+  starTimeUtc: Date;
+  endTimeUtc: Date;
+  entryNotes: string;
+  deletedOn: string;
 }
 
 export class TableData{
@@ -29,19 +29,20 @@ export class TableData{
   providedIn: 'root'
 })
 export class EmployeeDataService {
-  private apiUrl = 'https://rc-vault-fap-live-1.azurewebsites.net/api/gettimeentries?code=vO17RnE8vuzXzPJo5eaLLjXjmRW07law99QTD90zat9FfOQJKKUcgQ==';
+  //private apiUrl = 'https://rc-vault-fap-live-1.azurewebsites.net/api/gettimeentries?code=vO17RnE8vuzXzPJo5eaLLjXjmRW07law99QTD90zat9FfOQJKKUcgQ==';
+  private apiUrl = 'http://localhost:5294/api/EmployeeData';
 
   constructor(private http: HttpClient) {}
 
-  getEmployeeData(): Observable<TableData[]> {
+  getEmployeeData(): Observable<TableData[]> {    
     return this.http.get<EmployeeData[]>(this.apiUrl).pipe(
       map(dataArray => 
         dataArray.map(obj => 
           new TableData(
-            obj.Id, 
-            obj.EmployeeName??"Employee Without Name", 
-            Math.max(new Date(obj.EndTimeUtc).getTime() - new Date(obj.StarTimeUtc).getTime(),0) / (1000 * 60 * 60), 
-            obj.EntryNotes
+            obj.id, 
+            obj.employeeName??"Employee Without Name", 
+            Math.max(new Date(obj.endTimeUtc).getTime() - new Date(obj.starTimeUtc).getTime(),0) / (1000 * 60 * 60), 
+            obj.entryNotes
           )
         )
       ),
@@ -61,7 +62,6 @@ export class EmployeeDataService {
           }
           return acc;
         }, new Map<string, TableData>());
-      
         return Array.from(employeeMap.values());
       })
       

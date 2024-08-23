@@ -15,6 +15,19 @@ public class Program
     {
         services.AddControllers();
         services.AddSwaggerGen();
+
+        // Configure CORS policy
+        services.AddCors(options =>
+        {
+            options.AddPolicy("AllowSpecificOrigin",
+                builder =>
+                {
+                    builder.WithOrigins("http://localhost:4200") // Allow this origin
+                           .AllowAnyHeader()
+                           .AllowAnyMethod();
+                });
+        });
+
         services.AddHttpClient<EmployeeDataService>();
         services.AddSingleton<EmployeeDataService>(sp =>
         {
@@ -32,6 +45,7 @@ public class Program
             app.UseSwaggerUI();
         }
 
+        app.UseCors("AllowSpecificOrigin");
         app.UseAuthorization();
         app.MapControllers();
     }
